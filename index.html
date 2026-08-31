@@ -1,17 +1,293 @@
-{
-  "name": "Participacion 9 EGB",
-  "short_name": "Participacion 9",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "orientation": "any",
-  "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3429/3429355.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tablero 9 EGB</title>
+  
+  <!-- ANDROID CHROME CONFIGURACIÓN PWA -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- IPHONE SAFARI CONFIGURACIÓN PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Participación 9">
+
+  <style>
+    * {
+      box-sizing: border-box;
     }
-  ]
-}
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: #0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #f8fafc;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #1e293b;
+      padding: 6px 10px;
+      text-align: center;
+      border-bottom: 2px solid #38bdf8;
+      flex-shrink: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 6px;
+      padding: 6px;
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    @media (max-aspect-ratio: 1/1) {
+      .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+    }
+
+    .student-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      width: 100%;
+    }
+
+    .number-lastname-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .student-number {
+      background-color: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      min-width: 22px;
+      height: 18px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    /* TAMAÑO DE LETRA DEL APELLIDO */
+    .student-lastname {
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #38bdf8;
+      flex-grow: 1;
+    }
+
+    /* TAMAÑO DE LETRA DEL NOMBRE */
+    .student-name {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #f1f5f9;
+      width: 100%;
+      text-align: center;
+    }
+
+    .check-btn {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      color: #64748b;
+      height: 26px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .check-btn:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    /* ESTILOS AL MARCAR COMO CUMPLIDO */
+    .student-card.active-H {
+      border-color: #0284c7;
+      background-color: #0c4a6e;
+    }
+    .student-card.active-H .student-number { background-color: #38bdf8; }
+    .student-card.active-H .student-lastname { color: #38bdf8; }
+    .student-card.active-H .check-btn {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+    }
+
+    .student-card.active-M {
+      border-color: #ec4899;
+      background-color: #831843;
+    }
+    .student-card.active-M .student-number { background-color: #f472b6; }
+    .student-card.active-M .student-lastname { color: #f472b6; }
+    .student-card.active-M .check-btn {
+      background-color: #ec4899;
+      color: #ffffff;
+      border-color: #f472b6;
+    }
+
+    footer {
+      padding: 4px;
+      text-align: center;
+      background-color: #0f172a;
+      flex-shrink: 0;
+    }
+
+    .reset-btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    
+    .reset-btn:hover {
+      background-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>REGISTRO DE PARTICIPACIÓN EN VIVO 9 EGB</h1>
+  </header>
+
+  <div class="grid-container" id="grid"></div>
+
+  <footer>
+    <button class="reset-btn" onclick="resetAll()">Reiniciar Todo el Tablero</button>
+  </footer>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    /* =========================================================
+       REEMPLAZA ESTA LISTA CON LOS ALUMNOS DE 9 EGB Y SU GÉNERO ('H' o 'M')
+       ========================================================= */
+    const alumnos = [
+      { nombre: "APELLIDO1 APELLIDO2, NOMBRE1 NOMBRE2", genero: "H" },
+      { nombre: "APELLIDO1 APELLIDO2, NOMBRE1 NOMBRE2", genero: "M" },
+      { nombre: "ESTUDIANTE 3, NOMBRE", genero: "H" }
+      /* Agrega aquí hasta completar los estudiantes de 9 EGB */
+    ];
+
+    /* SÍMBOLOS ALQUÍMICOS ELEGANTES */
+    const ICONO_HOMBRE = "♂";
+    const ICONO_MUJER = "♀";
+    const ICONO_CHECK = "✔";
+
+    const grid = document.getElementById('grid');
+
+    alumnos.forEach((alumno, index) => {
+      const [apellido, nombres] = alumno.nombre.split(', ');
+      
+      const id = index + 1;
+      const numStr = id < 10 ? `0${id}` : id;
+      const card = document.createElement('div');
+      card.className = 'student-card';
+      card.id = `card-${id}`;
+      card.dataset.genero = alumno.genero;
+
+      const iconoInicial = alumno.genero === "H" ? ICONO_HOMBRE : ICONO_MUJER;
+
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="number-lastname-row">
+            <div class="student-number">${numStr}</div>
+            <div class="student-lastname" title="${apellido || ''}">${apellido || ''}</div>
+          </div>
+          <div class="student-name" title="${nombres || ''}">${nombres || ''}</div>
+        </div>
+        <div class="check-btn" onclick="toggleStatus(${id})">
+          <span id="text-${id}">${iconoInicial}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    function toggleStatus(id) {
+      const card = document.getElementById(`card-${id}`);
+      const text = document.getElementById(`text-${id}`);
+      const genero = card.dataset.genero;
+      const claseActiva = `active-${genero}`;
+      
+      const estaActiva = card.classList.toggle(claseActiva);
+      
+      if (estaActiva) {
+        text.innerHTML = ICONO_CHECK;
+      } else {
+        text.innerHTML = genero === "H" ? ICONO_HOMBRE : ICONO_MUJER;
+      }
+    }
+
+    function resetAll() {
+      alumnos.forEach((alumno, index) => {
+        const id = index + 1;
+        const card = document.getElementById(`card-${id}`);
+        const text = document.getElementById(`text-${id}`);
+        card.classList.remove('active-H', 'active-M');
+        text.innerHTML = alumno.genero === "H" ? ICONO_HOMBRE : ICONO_MUJER;
+      });
+    }
+  </script>
+</body>
+</html>
