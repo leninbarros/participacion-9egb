@@ -356,6 +356,12 @@
     }
 
     /* GRUPOS */
+    .modal-actions-top {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
     .group-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -366,6 +372,7 @@
       border: 1px solid #334155;
       border-radius: 6px;
       padding: 10px;
+      position: relative;
     }
     .group-card h3 {
       margin: 0 0 6px 0;
@@ -373,6 +380,21 @@
       color: #facc15;
       border-bottom: 1px solid #1e293b;
       padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-copy-group {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .btn-copy-group:hover {
+      background-color: #1e293b;
     }
     .group-member {
       font-size: 13px;
@@ -409,6 +431,9 @@
       <div class="modal-header">
         <h2>Equipos de Trabajo Optimizados</h2>
         <button class="close-modal" onclick="cerrarModalGrupos()">×</button>
+      </div>
+      <div class="modal-actions-top">
+        <button class="action-btn group-btn" style="font-size: 12px; padding: 4px 10px;" onclick="copiarTodosLosGrupos()">📋 Copiar Todos los Grupos</button>
       </div>
       <div class="modal-body group-grid" id="modalBodyGrupos"></div>
     </div>
@@ -453,7 +478,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Lista de 9 EGB con categorías asignadas (puedes ajustar de "promedio" a "ayuda" o "avanzado" según requieras)
+    // Lista de 9 EGB con categorías asignadas
     const alumnos = [
       { id: 1, nombre: "ANDRADE, SEBASTIAN", categoria: "ayuda" },
       { id: 2, nombre: "ANDRADE, EMMA", categoria: "promedio" },
@@ -476,6 +501,7 @@
     let alumnoActualNombre = "";
     let bitacorasGlobal = {};
     let editandoIndice = null;
+    let gruposUltimos = [];
 
     function formatearNombre(nombresStr) {
       const partes = nombresStr.trim().split(/\s+/);
@@ -788,6 +814,8 @@
         }
       }
 
+      gruposUltimos = grupos;
+
       idsSeleccionados.forEach(id => {
         const card = document.getElementById(`card-${id}`);
         if (card) card.classList.add('used');
@@ -809,11 +837,39 @@
           </div>`;
         }).join('');
 
-        cardDiv.innerHTML = `<h3>Grupo ${index + 1}</h3>${htmlMembers}`;
+        cardDiv.innerHTML = `
+          <h3>
+            <span>Grupo ${index + 1}</span>
+            <button class="btn-copy-group" onclick="copiarGrupo(${index})">📋 Copiar</button>
+          </h3>
+          ${htmlMembers}
+        `;
         modalBody.appendChild(cardDiv);
       });
 
       document.getElementById('modalGrupos').classList.add('active');
+    }
+
+    window.copiarGrupo = function(index) {
+      const g = gruposUltimos[index];
+      let texto = `*Grupo ${index + 1}*\n` + g.map(m => `- ${m.nombre}`).join('\n');
+      navigator.clipboard.writeText(texto).then(() => {
+        alert(`¡Grupo ${index + 1} copiado al portapapeles!`);
+      }).catch(err => {
+        console.error("Error al copiar: ", err);
+      });
+    }
+
+    window.copiarTodosLosGrupos = function() {
+      let textoTotal = "EQUIPOS DE TRABAJO - 9 EGB\n\n";
+      gruposUltimos.forEach((g, index) => {
+        textoTotal += `*Grupo ${index + 1}*\n` + g.map(m => `- ${m.nombre}`).join('\n') + "\n\n";
+      });
+      navigator.clipboard.writeText(textoTotal.trim()).then(() => {
+        alert("¡Todos los grupos fueron copiados al portapapeles!");
+      }).catch(err => {
+        console.error("Error al copiar todos: ", err);
+      });
     }
 
     window.cerrarModalGrupos = function() {
