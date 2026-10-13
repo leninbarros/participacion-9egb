@@ -571,10 +571,23 @@
         <button class="action-btn group-btn" style="font-size: 11px; padding: 3px 8px;" onclick="copiarTodosLosGrupos()">📋 Copiar Todos</button>
       </div>
       <div class="modal-body">
+        
+        <!-- 🎃🎃🎃🎃🎃🎃🎃🎃🎃 BANNER CON FANTASMA DE HALLOWEEN TIPO PAC-MAN INTEGRADO -->
         <div class="epic-banner">
+          <div class="halloween-ghost-container">
+            <svg width="42" height="42" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 4C17.64 4 6 15.64 6 30V56C6 58.21 7.79 60 10 60C11.1 60 12.1 59.55 12.83 58.83L18 53.66L23.17 58.83C23.9 59.55 24.9 60 26 60C27.1 60 28.1 59.55 28.83 58.83L34 53.66L39.17 58.83C39.9 59.55 40.9 60 42 60C44.21 60 46 58.21 46 56V30C46 15.64 34.36 4 32 4Z" fill="#ff77ff" stroke="#ffffff" stroke-width="3"/>
+              <circle cx="23" cy="24" r="5" fill="white"/>
+              <circle cx="24" cy="24" r="2" fill="#00ffff"/>
+              <circle cx="41" cy="24" r="5" fill="white"/>
+              <circle cx="42" cy="24" r="2" fill="#00ffff"/>
+            </svg>
+          </div>
           <div style="font-size: 11px; font-weight: bold; color: #c084fc; text-transform: uppercase;">¡Mueven mesas y sillas! Tiempo restante:</div>
           <div class="countdown-timer" id="timerDisplay">02:00</div>
         </div>
+          <!-- 🎃🎃🎃🎃🎃🎃🎃🎃🎃 FIN BANNER CON FANTASMA DE HALLOWEEN TIPO PAC-MAN INTEGRADO -->
+
         <div class="group-grid" id="modalBodyGrupos"></div>
       </div>
     </div>
@@ -1026,7 +1039,7 @@
 
       document.getElementById('modalGrupos').classList.add('active');
 
-      document.getElementById('youtubeAudio').src = "https://www.youtube.com/embed/FQpXZG_u4hw?autoplay=1";
+      document.getElementById('youtubeAudio').src = "https://www.youtube.com/embed/nETlIcLmSFU?autoplay=1";
 
       iniciarTemporizador(120, grupos.length);
     }
