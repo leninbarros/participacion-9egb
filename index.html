@@ -429,6 +429,25 @@
       padding: 6px;
       margin-bottom: 6px;
     }
+    /* ================================================================= */
+    /* 🎃 [NOTA/AVISO]: ESTILOS DEL FANTASMA TIPO PAC-MAN Y SU ANIMACIÓN */
+    /* ================================================================= */
+    .halloween-ghost-container {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      animation: floatGhost 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatGhost {
+      0%, 100% { transform: translateY(calc(-50% - 4px)); }
+      50% { transform: translateY(calc(-50% + 4px)); }
+    }
+    /* ================================================================= */
     .countdown-timer {
       font-size: 1.8rem;
       font-weight: 900;
