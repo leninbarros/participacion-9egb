@@ -426,33 +426,46 @@
       background: linear-gradient(135deg, #1e1b4b, #311042);
       border: 1px solid #a855f7;
       border-radius: 6px;
-      padding: 6px;
+      padding: 10px 6px;
       margin-bottom: 6px;
-      position: relative; /* 🎃 AVISO: Posicionado para albergar al fantasma decorativo */
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
-    /* ================================================================= */
-    /* 🎃 [NOTA/AVISO]: ESTILOS DEL FANTASMA TIPO PAC-MAN Y SU ANIMACIÓN */
-    /* ================================================================= */
+
+    /* 🎃 FANTASMA CON MOVIMIENTO DINÁMICO DE LADO A LADO */
     .halloween-ghost-container {
       position: absolute;
-      left: 12px;
+      left: 10px;
       top: 50%;
       transform: translateY(-50%);
       display: flex;
       align-items: center;
-      animation: floatGhost 2s ease-in-out infinite;
+      animation: moveGhostAcross 4s ease-in-out infinite alternate;
       pointer-events: none;
     }
 
-    @keyframes floatGhost {
-      0%, 100% { transform: translateY(calc(-50% - 4px)); }
-      50% { transform: translateY(calc(-50% + 4px)); }
+    @keyframes moveGhostAcross {
+      0% {
+        transform: translate(0, -50%) translateY(0) scaleX(1);
+      }
+      48% {
+        transform: translate(calc(100vw - 120px), -50%) translateY(-6px) scaleX(1);
+      }
+      50% {
+        transform: translate(calc(100vw - 120px), -50%) translateY(0) scaleX(-1);
+      }
+      98% {
+        transform: translate(0, -50%) translateY(6px) scaleX(-1);
+      }
+      100% {
+        transform: translate(0, -50%) translateY(0) scaleX(1);
+      }
     }
-    /* ================================================================= */
+
     .countdown-timer {
       font-size: 1.8rem;
       font-weight: 900;
@@ -596,7 +609,7 @@
       </div>
       <div class="modal-body">
         
-        <!-- 🎃🎃🎃🎃🎃🎃🎃🎃🎃 BANNER CON FANTASMA DE HALLOWEEN TIPO PAC-MAN INTEGRADO -->
+        <!-- 🎃 BANNER CON FANTASMA DE HALLOWEEN ANIMADO -->
         <div class="epic-banner">
           <div class="halloween-ghost-container">
             <svg width="42" height="42" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -610,7 +623,6 @@
           <div style="font-size: 11px; font-weight: bold; color: #c084fc; text-transform: uppercase;">¡Mueven mesas y sillas! Tiempo restante:</div>
           <div class="countdown-timer" id="timerDisplay">02:00</div>
         </div>
-          <!-- 🎃🎃🎃🎃🎃🎃🎃🎃🎃 FIN BANNER CON FANTASMA DE HALLOWEEN TIPO PAC-MAN INTEGRADO -->
 
         <div class="group-grid" id="modalBodyGrupos"></div>
       </div>
@@ -1000,7 +1012,6 @@
       let total = lista.length;
       let i = 0;
 
-      // Generar estrictamente grupos de 3 mientras sea posible
       while (total - i >= 3) {
         let grupoActual = [];
         for (let j = 0; j < 3; j++) {
@@ -1011,7 +1022,6 @@
         grupos.push(grupoActual);
       }
 
-      // Si sobran alumnos (1 o 2), se agrupan juntos al final como residuo
       if (i < total) {
         let grupoSobrante = [];
         while (i < total) {
